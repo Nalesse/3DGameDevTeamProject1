@@ -7,6 +7,9 @@ public abstract class Character : MonoBehaviour
     //This class holds shared attributes for the player and Enemy classes
     #region Public Vars
     public int health;
+
+    public float movementSpeed;
+
     #endregion
 
     #region Privite Vars

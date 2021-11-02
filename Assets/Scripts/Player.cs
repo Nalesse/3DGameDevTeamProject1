@@ -15,15 +15,23 @@ public class Player : Character
     #region Serialized Fields
 
     #endregion
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        PlayerMovement();
+    }
+
+    private void PlayerMovement()
+    {
+        var horizontalInput = Input.GetAxis("Horizontal");
+
+        transform.Translate(Vector3.right * movementSpeed * horizontalInput * Time.deltaTime);
     }
 }
