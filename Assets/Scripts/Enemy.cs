@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    #region Public Vars
+
+    #endregion
+
+    #region Privite Vars
+
+    #endregion
+
+    #region Serialized Fields
+
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
