@@ -16,6 +16,19 @@ public class Player : Character
 
     #endregion
 
+
+    public override void SingleTargetAttack(LayerMask target, int damage)
+    {
+        base.SingleTargetAttack(target, damage);
+
+        if (Physics.Raycast(ray, out hitData, 5, target))
+        {
+            Enemy enemy = hitData.transform.gameObject.GetComponent<Enemy>();
+            enemy.DecreaseHealth(damage);
+        }
+
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -26,7 +39,13 @@ public class Player : Character
     private void Update()
     {
         PlayerMovement();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            SingleTargetAttack(target, 5);
+        }
     }
+
 
     private void PlayerMovement()
     {
