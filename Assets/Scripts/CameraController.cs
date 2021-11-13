@@ -5,15 +5,23 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    #region Serilized Fields
+
     [Tooltip("How much the player is allowed to move on the x axis before moving the camera")]
     [SerializeField] private float xLimit;
 
     [Tooltip("How much to offset the camera on the x axis when it moves")]
     [SerializeField] private float xSnapPos;
 
+    [Tooltip("What point on the x to stop moving the camera")]
+    [SerializeField] private float xStopPoint;
+
     [Range(0.0f, 1.0f)]
     [Tooltip("0 = more smoothness, 1 = less smoothness")]
     [SerializeField] private float cameraSmoothness;
+
+    #endregion
+
 
     private Vector3 offset;
     private Player player;
@@ -30,6 +38,11 @@ public class CameraController : MonoBehaviour
         var xDistance = transform.position.x + xLimit;
         var negXDistance = transform.position.x - xLimit;
         var snapPos = new Vector3(xSnapPos, offset.y, offset.z);
+
+        if (player.transform.position.x >= xStopPoint || player.transform.position.x <= -xStopPoint)
+        {
+            return;
+        }
 
         if (player.transform.position.x >= xDistance)
         {
