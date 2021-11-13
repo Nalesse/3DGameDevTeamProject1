@@ -23,9 +23,9 @@ public class Enemy : Character
     {
         base.SingleTargetAttack(target, damage);
 
-        if (Physics.Raycast(ray, out hitData, 5, target))
+        if (Physics.Raycast(this.Ray, out this.HitData, 5, target))
         {
-            Player player = hitData.transform.gameObject.GetComponent<Player>();
+            Player player = this.HitData.transform.gameObject.GetComponent<Player>();
             player.DecreaseHealth(damage);
         }
     }
@@ -39,7 +39,7 @@ public class Enemy : Character
     // Update is called once per frame
     private void Update()
     {
-        MoveToPlayer();
+        //MoveToPlayer();
     }
 
     private void MoveToPlayer()
