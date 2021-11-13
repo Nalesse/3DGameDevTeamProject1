@@ -410,6 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xLimit: 3.47
   cameraSmoothness: 0.02
+  xSnapPos: 2.7
 --- !u!1 &1031233052
 GameObject:
   m_ObjectHideFlags: 0
