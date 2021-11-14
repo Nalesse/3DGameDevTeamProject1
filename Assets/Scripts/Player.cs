@@ -15,7 +15,11 @@ public class Player : Character
 
     #region Serialized Fields
 
-    [SerializeField] private float aoeRadius;
+    [Header("AOE Settings")]
+
+    [SerializeField] private Vector3 boxSize;
+
+    [SerializeField] private Vector3 aoeOffset;
 
     #endregion
 
@@ -35,7 +39,8 @@ public class Player : Character
     public void AoeAttack()
     {
 
-        Collider[] enemies = Physics.OverlapSphere(transform.position, aoeRadius, target);
+        Collider[] enemies = Physics.OverlapBox(transform.position + aoeOffset, boxSize / 2, transform.rotation, target);
+        ///Physics.OverlapSphere(transform.position, aoeRadius, target);
 
         foreach (var enemy in enemies)
         {
@@ -47,7 +52,8 @@ public class Player : Character
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, aoeRadius);
+        ///Gizmos.DrawWireSphere(transform.position, aoeRadius);
+        Gizmos.DrawWireCube(transform.position + aoeOffset, boxSize);
     }
 
     // Start is called before the first frame update
