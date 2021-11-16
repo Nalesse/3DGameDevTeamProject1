@@ -7,18 +7,25 @@ public class CameraController : MonoBehaviour
 {
     #region Serilized Fields
 
-    [Tooltip("How much the player is allowed to move on the x axis before moving the camera")]
-    [SerializeField] private float xLimit;
+    //[Tooltip("How much the player is allowed to move on the x axis before moving the camera")]
+    //[SerializeField] private float xLimit;
 
-    [Tooltip("How much to offset the camera on the x axis when it moves")]
-    [SerializeField] private float xSnapPos;
+    //[Tooltip("How much to offset the camera on the x axis when it moves")]
+    //[SerializeField] private float xSnapPos;
 
-    [Tooltip("What point on the x to stop moving the camera")]
-    [SerializeField] private float xStopPoint;
+    //[Tooltip("What point on the x to stop moving the camera")]
+    //[SerializeField] private float xStopPoint;
 
     [Range(0.0f, 1.0f)]
     [Tooltip("0 = more smoothness, 1 = less smoothness")]
     [SerializeField] private float cameraSmoothness;
+
+
+    [SerializeField] private float xMin;
+    [SerializeField] private float xMax;
+
+    private Vector3 lastPos;
+
 
     #endregion
 
@@ -29,30 +36,46 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindObjectOfType<Player>();
-        offset = transform.position - player.transform.position;
+    }
+
+    private void Start()
+    {
+        //transform.position = player.transform.position + offset;
+        lastPos = transform.position;
     }
 
     private void Update()
     {
-        var step = cameraSmoothness / Time.deltaTime;
-        var xDistance = transform.position.x + xLimit;
-        var negXDistance = transform.position.x - xLimit;
-        var snapPos = new Vector3(xSnapPos, offset.y, offset.z);
+        //var step = cameraSmoothness / Time.deltaTime;
+        //var xDistance = transform.position.x + xLimit;
+        //var negXDistance = transform.position.x - xLimit;
+        //var snapPos = new Vector3(xSnapPos, offset.y, offset.z);
 
-        if (player.transform.position.x >= xStopPoint || player.transform.position.x <= -xStopPoint)
-        {
-            return;
-        }
+        //if (player.transform.position.x >= xStopPoint || player.transform.position.x <= -xStopPoint)
+        //{
+        //    return;
+        //}
 
-        if (player.transform.position.x >= xDistance)
+        //if (player.transform.position.x >= xDistance)
+        //{
+        //    // Moves the camera slowly to the target position by the step amount each frame until the desired position is reached.
+        //    // This makes the camera movement smoother
+        //    transform.position = Vector3.MoveTowards(transform.position, player.transform.position + snapPos, step);
+        //}
+        //else if (player.transform.position.x <= negXDistance)
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, player.transform.position + Vector3.Reflect(snapPos, Vector3.left), step);
+        //}
+    }
+
+    private void LateUpdate()
+    {
+        float step = cameraSmoothness / Time.deltaTime;
+        if (player.transform.position.x >= xMin)
         {
-            // Moves the camera slowly to the target position by the step amount each frame until the desired position is reached.
-            // This makes the camera movement smoother
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position + snapPos, step);
+            float x = Mathf.Clamp(player.transform.position.x, xMin, xMax);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(x, 2.04f, -10), step);
         }
-        else if (player.transform.position.x <= negXDistance)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position + Vector3.Reflect(snapPos, Vector3.left), step);
-        }
+        
     }
 }
