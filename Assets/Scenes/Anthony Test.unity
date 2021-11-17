@@ -25002,7 +25002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288078, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: xMin
-      value: 6.34
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288078, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: xLimit
@@ -25010,7 +25010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288078, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: xSnapPos
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288078, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: xStopPoint
@@ -25030,7 +25030,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288079, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -10.93
       objectReference: {fileID: 0}
     - target: {fileID: 4436835825926288079, guid: a531614326726384e8ac49a58779b6f2, type: 3}
       propertyPath: m_LocalRotation.w

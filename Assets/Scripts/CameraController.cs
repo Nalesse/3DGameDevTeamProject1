@@ -46,6 +46,8 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        // old camera code
+
         //var step = cameraSmoothness / Time.deltaTime;
         //var xDistance = transform.position.x + xLimit;
         //var negXDistance = transform.position.x - xLimit;
@@ -71,11 +73,11 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         float step = cameraSmoothness / Time.deltaTime;
-        if (player.transform.position.x >= xMin)
-        {
-            float x = Mathf.Clamp(player.transform.position.x, xMin, xMax);
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(x, 2.04f, -10), step);
-        }
-        
+        Vector3 cameraPos = transform.position;
+        float x = Mathf.Clamp(player.transform.position.x, xMin, xMax);
+        cameraPos = Vector3.MoveTowards(cameraPos, new Vector3(x, cameraPos.y, cameraPos.z), step);
+
+        transform.position = cameraPos;
+
     }
 }
