@@ -7,6 +7,7 @@ public abstract class Character : MonoBehaviour
     // This class holds shared attributes for the player and Enemy classes
     #region Public/ Protected Vars
     [SerializeField] protected int health;
+    [SerializeField] protected HealthBar healthBar;
     [SerializeField] protected float movementSpeed;
 
     // Attack Vars
@@ -45,6 +46,7 @@ public abstract class Character : MonoBehaviour
     public void DecreaseHealth(int amount)
     {
         health -= amount;
+        healthBar.SetHealthUI(health);
     }
 
     /// <summary>
@@ -54,6 +56,7 @@ public abstract class Character : MonoBehaviour
     public void AddHealth(int amount)
     {
         health += amount;
+        healthBar.SetHealthUI(health);
     }
 
     /// <summary>
@@ -63,6 +66,7 @@ public abstract class Character : MonoBehaviour
     public void SetHealth(int amount)
     {
         health = amount;
+        healthBar.SetHealthUI(health);
     }
 
     /// <summary>

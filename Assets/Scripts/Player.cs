@@ -59,14 +59,24 @@ public class Player : Character
     // Start is called before the first frame update
     private void Start()
     {
-        
+        healthBar.SetMaxHealthUI(health);
     }
 
     // Update is called once per frame
     private void Update()
     {
         PlayerMovement();
+        PlayerInput();
 
+        if (GetHealth() <= 0)
+        {
+            SetHealth(0);
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    private void PlayerInput()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             SingleTargetAttack(target, 5);

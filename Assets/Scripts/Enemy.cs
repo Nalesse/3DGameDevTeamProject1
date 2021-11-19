@@ -12,6 +12,7 @@ public class Enemy : Character
     #region Privite Vars
 
     private Player player;
+
     #endregion
 
     #region Serialized Fields
@@ -34,12 +35,22 @@ public class Enemy : Character
     private void Awake()
     {
         player = GameObject.FindObjectOfType<Player>();
+        healthBar = GetComponentInChildren<HealthBar>();
+    }
+
+    private void Start()
+    {
+        healthBar.SetMaxHealthUI(health);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        //MoveToPlayer();
+        if (GetHealth() <= 0)
+        {
+            SetHealth(0);
+            Destroy(this.gameObject);
+        }
     }
 
     private void MoveToPlayer()
