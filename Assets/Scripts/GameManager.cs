@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; set; }
 
     private Player player;
+
     public void GameOver()
     {
         Debug.Log("Game Over");

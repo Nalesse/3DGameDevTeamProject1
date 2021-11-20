@@ -3195,7 +3195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976546, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.6
+      value: -4.38
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976546, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3203,7 +3203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976546, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.27
+      value: -4.6
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976546, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3234,8 +3234,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976547, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
+      propertyPath: maxZ
+      value: -2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151659802684976547, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
+      propertyPath: minZ
+      value: -6.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151659802684976547, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: damage
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151659802684976547, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
+      propertyPath: boxSize.z
+      value: 2.77
       objectReference: {fileID: 0}
     - target: {fileID: 1151659802684976547, guid: b650432cb92f81f49b10cc289f26b507, type: 3}
       propertyPath: healthBar
@@ -16510,6 +16522,7 @@ MonoBehaviour:
   currentType: 1
   healthToAdd: 10
   damageBoostAmount: 10
+  boostDuration: 0
 --- !u!65 &1123494729
 BoxCollider:
   m_ObjectHideFlags: 0

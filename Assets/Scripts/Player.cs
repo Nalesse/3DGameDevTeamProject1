@@ -16,6 +16,9 @@ public class Player : Character
     #endregion
 
     #region Serialized Fields
+    [Header("Player Movement")]
+    [SerializeField] private float maxZ;
+    [SerializeField] private float minZ;
 
     [Header("AOE Settings")]
 
@@ -94,7 +97,17 @@ public class Player : Character
     private void PlayerMovement()
     {
         var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
+        var playerPos = transform.position;
+        var playerRotation = transform.eulerAngles;
 
         transform.Translate(Vector3.right * movementSpeed * horizontalInput * Time.deltaTime);
+
+
+        if (horizontalInput == 0)
+        {
+            transform.Translate(Vector3.forward * movementSpeed * verticalInput * Time.deltaTime);
+        }
+        
     }
 }
