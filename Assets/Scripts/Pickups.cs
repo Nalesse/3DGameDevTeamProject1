@@ -96,7 +96,7 @@ public class Pickups : MonoBehaviour
             StartCoroutine(DamageBoost());
 
             // Coroutine stops if the object gets destroyed so I have to do a fake destroy.
-            GetComponent<MeshRenderer>().enabled = false;
+            GetComponentInChildren<MeshRenderer>().enabled = false;
             GetComponent<BoxCollider>().enabled = false;
         }
     }
