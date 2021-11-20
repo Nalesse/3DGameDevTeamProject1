@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Pickups : Character
+public class Pickups : MonoBehaviour
 {
     #region Public Vars
 
@@ -13,67 +13,99 @@ public class Pickups : Character
     #region Private Vars
 
     private Player player;
-    private Rigidbody playerRb;
+    //private Rigidbody playerRb;
+
+    private enum PickUpType
+
+    {
+        /// <summary>
+        /// Gives the player health on pickup
+        /// </summary>
+        Health,
+
+        /// <summary>
+        /// Temporarily increases the players damage on pickup 
+        /// </summary>
+        Damage
+    }
     #endregion
 
     #region Serialized Fields
 
+    [SerializeField] private PickUpType currentType;
+
+    [Header("Health Pickup Settings")]
+    [SerializeField] private int healthToAdd;
+
+    [Header("Damage Pickup Settings")]
+    [SerializeField] private int damageBoostAmount;
+    [SerializeField] private int boostDuration;
 
     #endregion
 
-    #region Health Get/Set
-        
-
-    #endregion
-
-    bool hasDamageBoost;
+    //bool hasDamageBoost;
 
     // Start is called before the first frame update
     void Awake()
     {
         player = GameObject.FindObjectOfType<Player>();
-        playerRb = GetComponent<Rigidbody>();
+        //playerRb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(hasDamageBoost && Input.GetMouseButtonDown(0))
-        {
-                SingleTargetAttack(target, 10);
-        }
+        //if(hasDamageBoost && Input.GetMouseButtonDown(0))
+        //{
+        //        SingleTargetAttack(target, 10);
+        //}
        
     }
 
-    private void OntiggerEnter(Collider other)
-    {
-        //utilizes the tag system in unity to check whether the player pickup a damage boost or a health pickup
-        //then deletes the game object once it is picked up
+    //private void OntiggerEnter(Collider other)
+    //{
+    //    //utilizes the tag system in unity to check whether the player pickup a damage boost or a health pickup
+    //    //then deletes the game object once it is picked up
 
-        if(other.CompareTag("DamageBoost"))
+    //    if(other.CompareTag("DamageBoost"))
+    //    {
+    //        Debug.Log("your damage has increased");
+    //        hasDamageBoost = true;
+    //        Destroy(other.gameObject);
+    //        StartCoroutine(DamageBoost());
+    //    }
+    //    else if (other.CompareTag("Health"))
+    //    {
+    //        Debug.Log("You picked up health");
+    //        AddHealth(10);
+    //        Destroy(other.gameObject);
+    //    }
+    //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        if (currentType == PickUpType.Health)
         {
-            Debug.Log("your damage has increased");
-            hasDamageBoost = true;
-            Destroy(other.gameObject);
-            StartCoroutine(PowerupCountdownRoutine());
+            player.AddHealth(healthToAdd);
+            Destroy(this.gameObject);
         }
-        else if (other.CompareTag("Health"))
+        else if (currentType == PickUpType.Damage)
         {
-            Debug.Log("You picked up health");
-            AddHealth(10);
-            Destroy(other.gameObject);
+            // Needed to put IEnumerator in a different script because the coroutine is stopped when the object is destroyed 
+            StartCoroutine(DamageBoost());
+
+            // Coroutine stops if the object gets destroyed so I have to do a fake destroy.
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
         }
     }
 
-    // creates a sort of repeatable function that will activate when called
-    // once activated the function will start a ten second timer which is
-    // going to determine the duration of the damage boost
-    IEnumerator PowerupCountdownRoutine()
+    private IEnumerator DamageBoost()
     {
-        yield return new WaitForSeconds(10);
-        hasDamageBoost = false;
+        var oldDamage = player.GetDamage();
+        player.SetDamage(damageBoostAmount);
+        yield return new WaitForSeconds(boostDuration);
+        player.SetDamage(oldDamage);
     }
-
-
-    
 }

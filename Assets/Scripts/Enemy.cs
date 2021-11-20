@@ -20,14 +20,14 @@ public class Enemy : Character
     #endregion
 
 
-    public override void SingleTargetAttack(LayerMask target, int damage)
+    public override void SingleTargetAttack()
     {
-        base.SingleTargetAttack(target, damage);
+        base.SingleTargetAttack();
 
-        if (Physics.Raycast(this.Ray, out this.HitData, 5, target))
+        if (Physics.Raycast(Ray, out HitData, 5, target))
         {
-            Player player = this.HitData.transform.gameObject.GetComponent<Player>();
-            player.DecreaseHealth(damage);
+            Player _player = HitData.transform.gameObject.GetComponent<Player>();
+            _player.DecreaseHealth(damage);
         }
     }
 

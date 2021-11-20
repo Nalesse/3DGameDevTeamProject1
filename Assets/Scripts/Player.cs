@@ -11,6 +11,8 @@ public class Player : Character
 
     #region Privite Vars
 
+    private int maxHealth;
+
     #endregion
 
     #region Serialized Fields
@@ -23,10 +25,11 @@ public class Player : Character
 
     #endregion
 
+    #region Attacks
 
-    public override void SingleTargetAttack(LayerMask target, int damage)
+    public override void SingleTargetAttack()
     {
-        base.SingleTargetAttack(target, damage);
+        base.SingleTargetAttack();
 
         if (Physics.Raycast(Ray, out HitData, 5, target))
         {
@@ -45,7 +48,7 @@ public class Player : Character
         foreach (var enemy in enemies)
         {
             Enemy _enemy = enemy.GetComponent<Enemy>();
-            _enemy.DecreaseHealth(5);
+            _enemy.DecreaseHealth(damage);
         }
     }
 
@@ -56,10 +59,14 @@ public class Player : Character
         Gizmos.DrawWireCube(transform.position + aoeOffset, boxSize);
     }
 
+    #endregion
+
+
     // Start is called before the first frame update
     private void Start()
     {
-        healthBar.SetMaxHealthUI(health);
+        maxHealth = health;
+        healthBar.SetMaxHealthUI(maxHealth);
     }
 
     // Update is called once per frame
@@ -68,18 +75,14 @@ public class Player : Character
         PlayerMovement();
         PlayerInput();
 
-        if (GetHealth() <= 0)
-        {
-            SetHealth(0);
-            GameManager.Instance.GameOver();
-        }
+        SetHealth(Mathf.Clamp(health, 0, maxHealth));
     }
 
     private void PlayerInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SingleTargetAttack(target, 5);
+            SingleTargetAttack();
         }
         else if (Input.GetMouseButtonDown(1))
         {

@@ -7,6 +7,7 @@ public abstract class Character : MonoBehaviour
     // This class holds shared attributes for the player and Enemy classes
     #region Public/ Protected Vars
     [SerializeField] protected int health;
+    [SerializeField] protected int damage;
     [SerializeField] protected HealthBar healthBar;
     [SerializeField] protected float movementSpeed;
 
@@ -20,13 +21,7 @@ public abstract class Character : MonoBehaviour
     /// <summary>
     /// Attacks the first target that the raycast hits. The target param specifies which layer mask to target
     /// </summary>
-    /// <param name="target">
-    /// What layer the attack will target
-    /// </param>
-    /// <param name="damage">
-    /// How much damage the attack will do.
-    /// </param>
-    public virtual void SingleTargetAttack(LayerMask target, int damage)
+    public virtual void SingleTargetAttack()
     {
         Ray = new Ray(transform.position, transform.right);
         Debug.DrawRay(Ray.origin, Ray.direction * 3, Color.red);
@@ -78,6 +73,20 @@ public abstract class Character : MonoBehaviour
     public int GetHealth()
     {
         return health;
+    }
+
+    #endregion
+
+    #region Damage Get/ Set Methodes
+
+    public void SetDamage(int amount)
+    {
+        damage = amount;
+    }
+
+    public int GetDamage()
+    {
+        return damage;
     }
 
     #endregion
