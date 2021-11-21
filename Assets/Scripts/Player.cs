@@ -34,7 +34,7 @@ public class Player : Character
     {
         base.SingleTargetAttack();
 
-        if (Physics.Raycast(Ray, out HitData, 5, target))
+        if (Physics.Raycast(Ray, out HitData, 2, target))
         {
             Enemy enemy = HitData.transform.gameObject.GetComponent<Enemy>();
             enemy.DecreaseHealth(damage);

@@ -24,9 +24,9 @@ public abstract class Character : MonoBehaviour
     public virtual void SingleTargetAttack()
     {
         Ray = new Ray(transform.position, transform.right);
-        Debug.DrawRay(Ray.origin, Ray.direction * 3, Color.red);
+        Debug.DrawRay(Ray.origin, Ray.direction * 2, Color.red);
 
-        if (Physics.Raycast(Ray, out HitData, 5, target))
+        if (Physics.Raycast(Ray, out HitData, 2, target))
         {
             Debug.Log(HitData.transform.gameObject.name + " took " + damage + " damage");
         }

@@ -6,14 +6,40 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; set; }
+    public static GameManager Instance { get; private set; }
 
-    private Player player;
+    [field: SerializeField] public int EnemiesAttacking { get; set; }
+
+    private Enemy[] oldEnemies;
 
     public void GameOver()
     {
         Debug.Log("Game Over");
     }
+
+    public void UpdateEnemyAttackCount()
+    {
+        Enemy[] enemies = GameObject.FindObjectsOfType<Enemy>();
+
+
+        if (enemies == oldEnemies)
+        {
+            return;
+        }
+
+        foreach (var enemy in enemies)
+        {
+            if (enemy.CurrentState == Enemy.State.Attacking)
+            {
+                EnemiesAttacking += 1;
+                EnemiesAttacking = Mathf.Clamp(EnemiesAttacking, 0, 2);
+            }
+        }
+
+        oldEnemies = enemies;
+    }
+
+
 
     private void Awake()
     {
@@ -23,7 +49,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        player = GameObject.FindObjectOfType<Player>();
+        EnemiesAttacking = 0;
     }
-
 }
