@@ -213,7 +213,7 @@ MonoBehaviour:
   health: 15
   damage: 5
   healthBar: {fileID: 0}
-  movementSpeed: 8
+  movementSpeed: 3
   target:
     serializedVersion: 2
     m_Bits: 128

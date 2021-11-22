@@ -79,6 +79,12 @@ public abstract class Character : MonoBehaviour
 
     #region Damage Get/ Set Methodes
 
+    /// <summary>
+    /// Sets the amount of damage the entity will do
+    /// </summary>
+    /// <param name="amount">
+    /// the value to set the damage to
+    /// </param>
     public void SetDamage(int amount)
     {
         damage = amount;

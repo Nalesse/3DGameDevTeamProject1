@@ -10,34 +10,12 @@ public class GameManager : MonoBehaviour
 
     [field: SerializeField] public int EnemiesAttacking { get; set; }
 
-    private Enemy[] oldEnemies;
 
     public void GameOver()
     {
         Debug.Log("Game Over");
     }
 
-    public void UpdateEnemyAttackCount()
-    {
-        Enemy[] enemies = GameObject.FindObjectsOfType<Enemy>();
-
-
-        if (enemies == oldEnemies)
-        {
-            return;
-        }
-
-        foreach (var enemy in enemies)
-        {
-            if (enemy.CurrentState == Enemy.State.Attacking)
-            {
-                EnemiesAttacking += 1;
-                EnemiesAttacking = Mathf.Clamp(EnemiesAttacking, 0, 2);
-            }
-        }
-
-        oldEnemies = enemies;
-    }
 
 
 
@@ -48,7 +26,10 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
 
-        EnemiesAttacking = 0;
+    private void Update()
+    {
+        EnemiesAttacking = Mathf.Clamp(EnemiesAttacking, 0, 2);
     }
 }

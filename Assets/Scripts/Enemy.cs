@@ -33,10 +33,19 @@ public class Enemy : Character
 
     private Player player;
 
+    /// <summary>
+    /// Time until the enemy is allowed to attack again 
+    /// </summary>
     private float nextAttackTime;
 
+    /// <summary>
+    /// decides when to stop chasing player
+    /// </summary>
     private bool stopMoving;
 
+    /// <summary>
+    /// Trigger for updating the attack count
+    /// </summary>
     private bool updateAttackCount;
 
     #region Privite AI Vars
@@ -78,6 +87,7 @@ public class Enemy : Character
 
     private void Start()
     {
+        // sets the health bars max value to health value set in inspector
         healthBar.SetMaxHealthUI(health);
     }
 
@@ -86,11 +96,13 @@ public class Enemy : Character
     {
         if (GetHealth() <= 0)
         {
+            // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
             Destroy(this.gameObject);
         }
 
+        // Handles the different states for the AI
         switch (CurrentState)
         {
             default:
@@ -120,9 +132,14 @@ public class Enemy : Character
     // Draws Debug spheres in the scene view when an enemy is selected. This helps visualize the ranges for the different states
     private void OnDrawGizmosSelected()
     {
+        // Search range sphere
         Gizmos.DrawWireSphere(transform.position, searchRange);
+
+        // wait range sphere
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, attackWaitRange);
+
+        // attack range sphere
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
@@ -130,7 +147,8 @@ public class Enemy : Character
     private void SearchForPlayer()
     {
         stopMoving = false;
-        updateAttackCount = true;
+
+        // searches for the player in the search range
         if (Vector3.Distance(transform.position, player.transform.position) < searchRange)
         {
             CurrentState = State.Waiting;
@@ -140,7 +158,7 @@ public class Enemy : Character
     private void MoveToWaitRange()
     {
 
-        float step = 1f * Time.deltaTime;
+        float step = movementSpeed * Time.deltaTime;
 
         Vector3 playerPos = player.transform.position;
         Vector3 enemyPos = transform.position;
@@ -149,23 +167,26 @@ public class Enemy : Character
 
         if (!stopMoving)
         {
+            // moves the enemy to the wait range
             transform.position = Vector3.MoveTowards(enemyPos, waitPos, step);
         }
 
-
+        // Sets state back to searching if player goes out of range
         if (Vector3.Distance(transform.position, player.transform.position) > searchRange)
         {
             CurrentState = State.Searching;
         }
 
+        // once the wait position is reached the enemy stops moving
         if (Vector3.Distance(transform.position, waitPos) < .1f)
         {
             
             stopMoving = true;
             
-
+            // if less then 2 enemies are attacking the player then the enemy starts the attack state
             if (GameManager.Instance.EnemiesAttacking < 2)
             {
+                updateAttackCount = true;
                 CurrentState = State.Attacking;
             }
         }
@@ -173,20 +194,24 @@ public class Enemy : Character
 
     private void AttackPlayer()
     {
-        float step = 1f * Time.deltaTime;
+        
+        float step = movementSpeed * Time.deltaTime;
 
         Vector3 playerPos = player.transform.position;
         Vector3 enemyPos = transform.position;
         Vector3 attackPos = new Vector3(playerPos.x + attackRange, enemyPos.y, enemyPos.z);
 
+        // Moves to the attack range
         transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
 
+        // updates the number of enemies attacking the player
         if (updateAttackCount)
         {
-            GameManager.Instance.UpdateEnemyAttackCount();
+            GameManager.Instance.EnemiesAttacking += 1;
             updateAttackCount = false;
         }
 
+        // Adds a delay to how often to attack the player
         if (Time.time > nextAttackTime)
         {
             SingleTargetAttack();
