@@ -206,6 +206,12 @@ public class Enemy : Character
         // Moves to the attack range
         transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
 
+        // Sets state back to searching if player goes out of range
+        if (Vector3.Distance(transform.position, player.transform.position) > searchRange)
+        {
+            CurrentState = State.Searching;
+        }
+
         // updates the number of enemies attacking the player
         if (updateAttackCount)
         {
