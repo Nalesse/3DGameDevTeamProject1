@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - DamageBoost
   - player
+  - First Spawn
   layers:
   - Default
   - TransparentFX
