@@ -89,6 +89,7 @@ public class Enemy : Character
     {
         // sets the health bars max value to health value set in inspector
         healthBar.SetMaxHealthUI(health);
+        healthBar.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -182,6 +183,7 @@ public class Enemy : Character
         {
             
             stopMoving = true;
+
             
             // if less then 2 enemies are attacking the player then the enemy starts the attack state
             if (GameManager.Instance.EnemiesAttacking < 2)

@@ -40,8 +40,13 @@ public abstract class Character : MonoBehaviour
     /// <param name="amount">How much health to subtract</param>
     public void DecreaseHealth(int amount)
     {
-        health -= amount;
-        healthBar.SetHealthUI(health);
+        healthBar.gameObject.SetActive(true);
+        if(healthBar.enabled == true)
+        {
+            health -= amount;
+            healthBar.SetHealthUI(health);
+        }
+        
     }
 
     /// <summary>
