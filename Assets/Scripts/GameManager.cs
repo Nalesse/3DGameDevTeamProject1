@@ -8,16 +8,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    // Global Data Management
     [field: SerializeField] public int EnemiesAttacking { get; set; }
 
 
     public void GameOver()
     {
+        // TODO finish game over function and Implement UI
         Debug.Log("Game Over");
     }
-
-
-
 
     private void Awake()
     {
@@ -30,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Limits the number of enemies attacking to 2 
         EnemiesAttacking = Mathf.Clamp(EnemiesAttacking, 0, 2);
     }
 }

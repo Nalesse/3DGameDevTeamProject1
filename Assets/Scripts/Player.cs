@@ -7,6 +7,8 @@ public class Player : Character
 {
     #region Public Vars
 
+    public static Player Instance { get; private set; }
+
     #endregion
 
     #region Privite Vars
@@ -64,6 +66,14 @@ public class Player : Character
 
     #endregion
 
+    private void Awake()
+    {
+        // Singleton setup lets the script be accessed form other scripts without using GameObject.Find
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     // Start is called before the first frame update
     private void Start()

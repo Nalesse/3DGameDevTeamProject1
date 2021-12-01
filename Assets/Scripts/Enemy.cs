@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.Rendering;
 
 public class Enemy : Character
 {
@@ -48,20 +45,19 @@ public class Enemy : Character
     /// </summary>
     private bool updateAttackCount;
 
-    #region Privite AI Vars
-
-
-   #endregion
-
     #endregion
 
     #region Serialized Fields
+    
 
     #region AI Vars
     [Header("AI Settings")]
     [SerializeField] private float searchRange;
     [SerializeField] private float attackWaitRange;
     [SerializeField] private float attackRange;
+
+    [Tooltip("How often the enemy will attack")]
+    [SerializeField] private float attackRate;
 
     #endregion
     #endregion
@@ -81,7 +77,7 @@ public class Enemy : Character
 
     private void Awake()
     {
-        player = GameObject.FindObjectOfType<Player>();
+        player = FindObjectOfType<Player>();
         healthBar = GetComponentInChildren<HealthBar>();
     }
 
@@ -184,11 +180,11 @@ public class Enemy : Character
             
             stopMoving = true;
 
-            
             // if less then 2 enemies are attacking the player then the enemy starts the attack state
             if (GameManager.Instance.EnemiesAttacking < 2)
             {
                 updateAttackCount = true;
+                stopMoving = false;
                 CurrentState = State.Attacking;
             }
         }
@@ -204,7 +200,11 @@ public class Enemy : Character
         Vector3 attackPos = new Vector3(playerPos.x + attackRange, enemyPos.y, enemyPos.z);
 
         // Moves to the attack range
-        transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
+        if (!stopMoving)
+        {
+            transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
+        }
+        
 
         // Sets state back to searching if player goes out of range
         if (Vector3.Distance(transform.position, player.transform.position) > searchRange)
@@ -223,13 +223,25 @@ public class Enemy : Character
         if (Time.time > nextAttackTime)
         {
             SingleTargetAttack();
-            float attackRate = 3f;
             nextAttackTime = Time.time + attackRate;
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("StopTrigger"))
+        {
+            stopMoving = true;
+        }
+    }
 
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("StopTrigger"))
+        {
+            stopMoving = false;
+        }
+    }
 
     #endregion
 

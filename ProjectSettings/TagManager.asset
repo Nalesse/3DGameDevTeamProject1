@@ -9,6 +9,7 @@ TagManager:
   - DamageBoost
   - player
   - First Spawn
+  - StopTrigger
   layers:
   - Default
   - TransparentFX
