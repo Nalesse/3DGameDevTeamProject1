@@ -93,6 +93,7 @@ public class Player : Character
 
     private void PlayerInput()
     {
+        // Input for player attacks
         if (Input.GetMouseButtonDown(0))
         {
             SingleTargetAttack();
@@ -111,6 +112,7 @@ public class Player : Character
         var playerPos = transform.position;
         var playerRotation = transform.eulerAngles;
 
+        // Moves player left or right based on horizontal input
         transform.Translate(Vector3.right * movementSpeed * horizontalInput * Time.deltaTime);
 
 
@@ -118,6 +120,5 @@ public class Player : Character
         {
             transform.Translate(Vector3.forward * movementSpeed * verticalInput * Time.deltaTime);
         }
-        
     }
 }

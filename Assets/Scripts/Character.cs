@@ -19,7 +19,7 @@ public abstract class Character : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Attacks the first target that the raycast hits. The target param specifies which layer mask to target
+    /// Attacks the first target that the RayCast hits.
     /// </summary>
     public virtual void SingleTargetAttack()
     {
@@ -95,6 +95,12 @@ public abstract class Character : MonoBehaviour
         damage = amount;
     }
 
+    /// <summary>
+    /// Gets the current damage value
+    /// </summary>
+    /// <returns>
+    /// The current damage value
+    /// </returns>
     public int GetDamage()
     {
         return damage;

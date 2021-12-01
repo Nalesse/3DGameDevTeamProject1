@@ -88,11 +88,10 @@ public class Pickups : MonoBehaviour
         if (currentType == PickUpType.Health)
         {
             player.AddHealth(healthToAdd);
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
         else if (currentType == PickUpType.Damage)
         {
-            // Needed to put IEnumerator in a different script because the coroutine is stopped when the object is destroyed 
             StartCoroutine(DamageBoost());
 
             // Coroutine stops if the object gets destroyed so I have to do a fake destroy.
@@ -107,5 +106,6 @@ public class Pickups : MonoBehaviour
         player.SetDamage(damageBoostAmount);
         yield return new WaitForSeconds(boostDuration);
         player.SetDamage(oldDamage);
+        Destroy(gameObject);
     }
 }

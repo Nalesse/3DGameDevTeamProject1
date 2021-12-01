@@ -23,6 +23,9 @@ public class Enemy : Character
         Attacking
     }
 
+    /// <summary>
+    /// Gets the Enemy's current state. Used for AI control
+    /// </summary>
     public State CurrentState { get; private set; }
     #endregion
 
@@ -48,7 +51,7 @@ public class Enemy : Character
     /// <summary>
     /// checks if the enemy stop trigger has been triggered 
     /// </summary>
-    private bool triggered = false;
+    private bool triggered;
 
     /// <summary>
     /// Trigger for updating the attack count
@@ -79,6 +82,7 @@ public class Enemy : Character
 
         if (Physics.Raycast(Ray, out HitData, attackRange, target))
         {
+            // overrides the SingleTargetAttack method to damage the player
             Player _player = HitData.transform.gameObject.GetComponent<Player>();
             _player.DecreaseHealth(damage);
         }
@@ -128,8 +132,6 @@ public class Enemy : Character
                 AttackPlayer();
                 break;
         }
-
-        //Debug.Log(CurrentState);
 
     }
 
@@ -229,11 +231,6 @@ public class Enemy : Character
             CurrentState = State.Searching;
         }
 
-        //if (Vector3.Distance(transform.position, player.transform.position) > attackRange)
-        //{
-        //    stopMoving = false;
-        //    CurrentState = State.Waiting;
-        //}
 
         // updates the number of enemies attacking the player
         if (updateAttackCount)
@@ -254,10 +251,21 @@ public class Enemy : Character
     {
         if (other.CompareTag("StopTrigger"))
         {
+            // setup for custom OnTriggerExit logic. Normal OnTriggerExit does not work when an object is destroyed 
             triggered = true;
             otherEnemy = other;
 
             stopMoving = true;
+        }
+    }
+
+    // Trigger exit logic for when the enemy is not destroyed but still leaves the trigger
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("StopTrigger"))
+        {
+            triggered = false;
+            otherEnemy = null;
         }
     }
 

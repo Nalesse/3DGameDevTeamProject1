@@ -6,9 +6,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// Gets the Current Instance for the GameManager, used for singleton
+    /// </summary>
     public static GameManager Instance { get; private set; }
 
-    // Global Data Management
+    /// <summary>
+    /// Gets or sets the number of enemies currently attacking the player 
+    /// </summary>
     [field: SerializeField] public int EnemiesAttacking { get; set; }
 
 
