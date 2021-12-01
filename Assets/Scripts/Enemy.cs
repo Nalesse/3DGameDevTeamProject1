@@ -31,6 +31,11 @@ public class Enemy : Character
     private Player player;
 
     /// <summary>
+    /// Reference to the other enemy that this enemy instance will collide with
+    /// </summary>
+    private Collider otherEnemy;
+
+    /// <summary>
     /// Time until the enemy is allowed to attack again 
     /// </summary>
     private float nextAttackTime;
@@ -39,6 +44,11 @@ public class Enemy : Character
     /// decides when to stop chasing player
     /// </summary>
     private bool stopMoving;
+
+    /// <summary>
+    /// checks if the enemy stop trigger has been triggered 
+    /// </summary>
+    private bool triggered = false;
 
     /// <summary>
     /// Trigger for updating the attack count
@@ -96,7 +106,12 @@ public class Enemy : Character
             // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+
+        if (triggered && !otherEnemy)
+        {
+            stopMoving = false;
         }
 
         // Handles the different states for the AI
@@ -113,6 +128,8 @@ public class Enemy : Character
                 AttackPlayer();
                 break;
         }
+
+        //Debug.Log(CurrentState);
 
     }
 
@@ -204,13 +221,19 @@ public class Enemy : Character
         {
             transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
         }
-        
+
 
         // Sets state back to searching if player goes out of range
         if (Vector3.Distance(transform.position, player.transform.position) > searchRange)
         {
             CurrentState = State.Searching;
         }
+
+        //if (Vector3.Distance(transform.position, player.transform.position) > attackRange)
+        //{
+        //    stopMoving = false;
+        //    CurrentState = State.Waiting;
+        //}
 
         // updates the number of enemies attacking the player
         if (updateAttackCount)
@@ -231,15 +254,10 @@ public class Enemy : Character
     {
         if (other.CompareTag("StopTrigger"))
         {
-            stopMoving = true;
-        }
-    }
+            triggered = true;
+            otherEnemy = other;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("StopTrigger"))
-        {
-            stopMoving = false;
+            stopMoving = true;
         }
     }
 
