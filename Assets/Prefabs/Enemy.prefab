@@ -110,7 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6387223656049681663}
   - component: {fileID: 3062598723724984847}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: StopTrigger
   m_TagString: StopTrigger
   m_Icon: {fileID: 0}

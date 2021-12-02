@@ -15,6 +15,8 @@ public class Player : Character
 
     private int maxHealth;
 
+    private Vector3 playerRotation;
+
     #endregion
 
     #region Serialized Fields
@@ -48,20 +50,39 @@ public class Player : Character
     {
 
         Collider[] enemies = Physics.OverlapBox(transform.position + aoeOffset, boxSize / 2, transform.rotation, target);
-        ///Physics.OverlapSphere(transform.position, aoeRadius, target);
+
+        // Rotates the overlap if the player changes direction
+        if (Math.Abs(playerRotation.y - 180) < 0.1)
+        {
+            enemies = Physics.OverlapBox(transform.position - aoeOffset, boxSize / 2, transform.rotation, target);
+        }
+
 
         foreach (var enemy in enemies)
         {
-            Enemy _enemy = enemy.GetComponent<Enemy>();
-            _enemy.DecreaseHealth(damage);
+            Enemy _enemy = enemy.gameObject.GetComponent<Enemy>();
+
+            if (_enemy != null)
+            {
+                _enemy.DecreaseHealth(damage);
+            }
+            
         }
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        ///Gizmos.DrawWireSphere(transform.position, aoeRadius);
-        Gizmos.DrawWireCube(transform.position + aoeOffset, boxSize);
+
+        // Rotates the debug box with the player
+        if (Math.Abs(playerRotation.y - 180) < 0.1)
+        {
+            Gizmos.DrawWireCube(transform.position - aoeOffset, boxSize);
+        }
+        else
+        {
+            Gizmos.DrawWireCube(transform.position + aoeOffset, boxSize);
+        }
     }
 
     #endregion
@@ -87,7 +108,6 @@ public class Player : Character
     {
         PlayerMovement();
         PlayerInput();
-
         SetHealth(Mathf.Clamp(health, 0, maxHealth));
     }
 
@@ -107,18 +127,27 @@ public class Player : Character
 
     private void PlayerMovement()
     {
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
-        var playerPos = transform.position;
-        var playerRotation = transform.eulerAngles;
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        playerRotation = transform.eulerAngles;
+        Vector3 referenceDirection = Vector3.right;
+
+        if (horizontalInput > 0)
+        {
+            playerRotation.y = 0;
+            transform.rotation = Quaternion.Euler(playerRotation);
+            referenceDirection = Vector3.right;
+        }
+        else if (horizontalInput < 0)
+        {
+            playerRotation.y = 180;
+            transform.rotation = Quaternion.Euler(playerRotation);
+            referenceDirection = Vector3.left;
+        }
 
         // Moves player left or right based on horizontal input
-        transform.Translate(Vector3.right * movementSpeed * horizontalInput * Time.deltaTime);
+        transform.Translate(referenceDirection * movementSpeed * horizontalInput * Time.deltaTime);
 
 
-        if (horizontalInput == 0)
-        {
-            transform.Translate(Vector3.forward * movementSpeed * verticalInput * Time.deltaTime);
-        }
     }
 }
