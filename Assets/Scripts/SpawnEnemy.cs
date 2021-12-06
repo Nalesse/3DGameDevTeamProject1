@@ -7,12 +7,11 @@ public class SpawnEnemy : MonoBehaviour
 
     public GameObject enemy;
     public Transform enemyPos;
-    private float repeatRate = 5.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -25,7 +24,10 @@ public class SpawnEnemy : MonoBehaviour
     {
         if (other.gameObject.tag == "player")
         {
-            InvokeRepeating("enemySpawner", 0.5f, repeatRate);
+            for(int i = 0; i < 3; i++)
+            {
+                enemySpawner();
+            }
             Destroy(gameObject, 11);
             gameObject.GetComponent<BoxCollider>().enabled = false;
         }
