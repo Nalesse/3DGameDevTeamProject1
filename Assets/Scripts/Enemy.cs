@@ -58,6 +58,8 @@ public class Enemy : Character
     /// </summary>
     private bool updateAttackCount;
 
+    private Animator animator;
+
     #endregion
 
     #region Serialized Fields
@@ -93,6 +95,7 @@ public class Enemy : Character
     {
         player = FindObjectOfType<Player>();
         healthBar = GetComponentInChildren<HealthBar>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -132,6 +135,8 @@ public class Enemy : Character
                 AttackPlayer();
                 break;
         }
+
+        animator.SetBool("isWalking", stopMoving);
 
     }
 

@@ -17,6 +17,8 @@ public class Player : Character
 
     private Vector3 playerRotation;
 
+    private Animator animator;
+
     #endregion
 
     #region Serialized Fields
@@ -94,6 +96,8 @@ public class Player : Character
         {
             Instance = this;
         }
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     // Start is called before the first frame update
