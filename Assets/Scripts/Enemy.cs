@@ -87,6 +87,7 @@ public class Enemy : Character
             // overrides the SingleTargetAttack method to damage the player
             Player _player = HitData.transform.gameObject.GetComponent<Player>();
             _player.DecreaseHealth(damage);
+            animator.SetTrigger("Attack");
         }
     }
 
@@ -136,7 +137,7 @@ public class Enemy : Character
                 break;
         }
 
-        animator.SetBool("isWalking", stopMoving);
+        
 
     }
 
