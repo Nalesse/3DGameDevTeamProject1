@@ -132,6 +132,7 @@ public class Player : Character
         playerRotation = transform.eulerAngles;
         Vector3 referenceDirection = Vector3.right;
 
+        // Rotates the player based on the horizontal input 
         if (horizontalInput > 0)
         {
             playerRotation.y = 0;
