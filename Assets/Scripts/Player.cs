@@ -13,11 +13,13 @@ public class Player : Character
 
     #region Privite Vars
 
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    private static readonly int Punch = Animator.StringToHash("Punch");
+
     private int maxHealth;
-
     private Vector3 playerRotation;
-
     private Animator animator;
+
 
     #endregion
 
@@ -42,6 +44,7 @@ public class Player : Character
 
         if (Physics.Raycast(Ray, out HitData, 2, target))
         {
+            animator.SetTrigger(Punch);
             Enemy enemy = HitData.transform.gameObject.GetComponent<Enemy>();
             enemy.DecreaseHealth(damage);
         }
@@ -142,17 +145,21 @@ public class Player : Character
             playerRotation.y = 0;
             transform.rotation = Quaternion.Euler(playerRotation);
             referenceDirection = Vector3.right;
+            animator.SetBool(IsWalking, true);
         }
         else if (horizontalInput < 0)
         {
             playerRotation.y = 180;
             transform.rotation = Quaternion.Euler(playerRotation);
             referenceDirection = Vector3.left;
+            animator.SetBool(IsWalking, true);
+        }
+        else
+        {
+            animator.SetBool(IsWalking, false);
         }
 
         // Moves player left or right based on horizontal input
         transform.Translate(referenceDirection * movementSpeed * horizontalInput * Time.deltaTime);
-
-
     }
 }
