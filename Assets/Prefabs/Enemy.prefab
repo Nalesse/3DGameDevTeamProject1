@@ -161,8 +161,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7037824, y: 1, z: 1.376272}
-  m_Center: {x: 0.14969975, y: 0, z: 0.04520175}
+  m_Size: {x: 1.4202077, y: 1, z: 1.376272}
+  m_Center: {x: 0.17179489, y: 0, z: 0.04520178}
 --- !u!1 &5899736071313828066
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +234,7 @@ MonoBehaviour:
   searchRange: 5.83
   attackWaitRange: 3.16
   attackRange: 1.2
-  attackRate: 1.4
+  attackRate: 1.5
 --- !u!54 &3271882846816360250
 Rigidbody:
   m_ObjectHideFlags: 0
