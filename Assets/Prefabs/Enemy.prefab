@@ -228,13 +228,13 @@ MonoBehaviour:
   damage: 5
   healthBar: {fileID: 0}
   movementSpeed: 3
+  <AttackRate>k__BackingField: 1.4
   target:
     serializedVersion: 2
     m_Bits: 128
   searchRange: 5.83
   attackWaitRange: 3.16
   attackRange: 1.2
-  attackRate: 1.5
 --- !u!54 &3271882846816360250
 Rigidbody:
   m_ObjectHideFlags: 0

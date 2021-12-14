@@ -120,15 +120,43 @@ public class Player : Character
 
     private void PlayerInput()
     {
+
         // Input for player attacks
         if (Input.GetMouseButtonDown(0))
         {
-            SingleTargetAttack();
+            if (CheckAttackDelay())
+            {
+                SingleTargetAttack();
+            }
+            
+
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            AoeAttack();
+            if (CheckAttackDelay())
+            {
+                AoeAttack();
+            }
+            
         }
+
+    }
+
+    /// <summary>
+    /// Helper function for checking the attack delay
+    /// </summary>
+    /// <returns>
+    /// True or false
+    /// </returns>
+    private bool CheckAttackDelay()
+    {
+        if (Time.time > NextAttackTime)
+        {
+            NextAttackTime = Time.time + AttackRate;
+            return true;
+        }
+
+        return false;
     }
 
 

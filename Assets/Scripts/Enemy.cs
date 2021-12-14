@@ -42,11 +42,6 @@ public class Enemy : Character
     private Collider otherEnemy;
 
     /// <summary>
-    /// Time until the enemy is allowed to attack again 
-    /// </summary>
-    private float nextAttackTime;
-
-    /// <summary>
     /// decides when to stop chasing player
     /// </summary>
     private bool stopMoving;
@@ -73,9 +68,6 @@ public class Enemy : Character
     [SerializeField] private float searchRange;
     [SerializeField] private float attackWaitRange;
     [SerializeField] private float attackRange;
-
-    [Tooltip("How often the enemy will attack")]
-    [SerializeField] private float attackRate;
 
     #endregion
     #endregion
@@ -232,10 +224,10 @@ public class Enemy : Character
         Vector3 attackPos = new Vector3(playerPos.x + attackRange, enemyPos.y, enemyPos.z);
 
         // Attacks the player at the rate of the next attack time.
-        if (Time.time > nextAttackTime)
+        if (Time.time > NextAttackTime)
         {
             SingleTargetAttack();
-            nextAttackTime = Time.time + attackRate;
+            NextAttackTime = Time.time + AttackRate;
         }
 
         // if the enemy is colliding with another enemy then the rest of the logic is ignored

@@ -82,6 +82,7 @@ MonoBehaviour:
   damage: 5
   healthBar: {fileID: 8002973912317569017, guid: f6f80ac0af9722b46992be4b91ac1e28, type: 3}
   movementSpeed: 8
+  <AttackRate>k__BackingField: 1
   target:
     serializedVersion: 2
     m_Bits: 64

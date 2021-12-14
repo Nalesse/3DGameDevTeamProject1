@@ -11,6 +11,10 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected HealthBar healthBar;
     [SerializeField] protected float movementSpeed;
 
+    protected float NextAttackTime { get; set; }
+
+    [field: SerializeField] protected float AttackRate { get; set; }
+
     // Attack Vars
     [SerializeField] protected LayerMask target;
     protected Ray Ray;
