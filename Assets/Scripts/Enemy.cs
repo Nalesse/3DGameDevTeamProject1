@@ -56,7 +56,7 @@ public class Enemy : Character
     /// </summary>
     private bool updateAttackCount;
 
-    private Animator animator;
+    //private Animator animator;
 
     #endregion
 
@@ -92,6 +92,8 @@ public class Enemy : Character
         player = FindObjectOfType<Player>();
         healthBar = GetComponentInChildren<HealthBar>();
         animator = GetComponentInChildren<Animator>();
+        Damaged = Animator.StringToHash("EnemyDamaged");
+        Death = Animator.StringToHash("EnemyDeath");
     }
 
     private void Start()
@@ -109,7 +111,7 @@ public class Enemy : Character
             // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
-            Destroy(gameObject);
+            Destroy(gameObject, 3);
         }
 
         // custom OnTriggerExit logic for when the enemy is destroyed
@@ -162,6 +164,11 @@ public class Enemy : Character
 
     private void SearchForPlayer()
     {
+        if (isDead || player.isDead)
+        {
+            return;
+        }
+
         stopMoving = false;
 
         // searches for the player in the search range
@@ -173,6 +180,10 @@ public class Enemy : Character
 
     private void MoveToWaitRange()
     {
+        if (isDead || player.isDead)
+        {
+            return;
+        }
 
         float step = movementSpeed * Time.deltaTime;
 
@@ -216,7 +227,11 @@ public class Enemy : Character
 
     private void AttackPlayer()
     {
-        
+        if (isDead || player.isDead)
+        {
+            return;
+        }
+
         float step = movementSpeed * Time.deltaTime;
 
         Vector3 playerPos = player.transform.position;

@@ -20,6 +20,14 @@ public abstract class Character : MonoBehaviour
     protected Ray Ray;
     protected RaycastHit HitData;
 
+    public bool isDead;
+
+    // Shared Animator Params
+    protected int Damaged;
+    protected int Death;
+
+    protected Animator animator;
+
     #endregion
 
     /// <summary>
@@ -47,7 +55,21 @@ public abstract class Character : MonoBehaviour
         healthBar.gameObject.SetActive(true);
         if(healthBar.enabled == true)
         {
+
             health -= amount;
+
+            if (!isDead)
+            {
+                animator.SetTrigger(Damaged);
+            }
+            
+
+            if (health == 0)
+            {
+                isDead = true;
+                animator.SetTrigger(Death);
+            }
+
             healthBar.SetHealthUI(health);
         }
         
