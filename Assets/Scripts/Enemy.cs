@@ -42,6 +42,16 @@ public class Enemy : Character
     private Collider otherEnemy;
 
     /// <summary>
+    /// The collider attached to this script. a.k.a the enemy
+    /// </summary>
+    private Collider enemyCollider;
+
+    /// <summary>
+    /// The collider attached to the player
+    /// </summary>
+    private Collider playerCollider;
+
+    /// <summary>
     /// decides when to stop chasing player
     /// </summary>
     private bool stopMoving;
@@ -89,11 +99,14 @@ public class Enemy : Character
 
     private void Awake()
     {
+        // Initializes several vars when the script loads 
         player = FindObjectOfType<Player>();
         healthBar = GetComponentInChildren<HealthBar>();
         animator = GetComponentInChildren<Animator>();
         Damaged = Animator.StringToHash("EnemyDamaged");
         Death = Animator.StringToHash("EnemyDeath");
+        enemyCollider = GetComponent<BoxCollider>();
+        playerCollider = player.GetComponent<BoxCollider>();
     }
 
     private void Start()
@@ -111,6 +124,9 @@ public class Enemy : Character
             // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
+
+            // Prevents the player from getting stuck on the enemy's body
+            Physics.IgnoreCollision(enemyCollider, playerCollider);
             Destroy(gameObject, 2);
         }
 
