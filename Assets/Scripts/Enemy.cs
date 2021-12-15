@@ -111,7 +111,7 @@ public class Enemy : Character
             // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
-            Destroy(gameObject, 3);
+            Destroy(gameObject, 2);
         }
 
         // custom OnTriggerExit logic for when the enemy is destroyed
