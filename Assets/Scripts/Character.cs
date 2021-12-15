@@ -11,10 +11,22 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected HealthBar healthBar;
     [SerializeField] protected float movementSpeed;
 
+    protected float NextAttackTime { get; set; }
+
+    [field: SerializeField] protected float AttackRate { get; set; }
+
     // Attack Vars
     [SerializeField] protected LayerMask target;
     protected Ray Ray;
     protected RaycastHit HitData;
+
+    public bool isDead;
+
+    // Shared Animator Params
+    protected int Damaged;
+    protected int Death;
+
+    protected Animator animator;
 
     #endregion
 
@@ -43,7 +55,21 @@ public abstract class Character : MonoBehaviour
         healthBar.gameObject.SetActive(true);
         if(healthBar.enabled == true)
         {
+
             health -= amount;
+
+            if (!isDead)
+            {
+                animator.SetTrigger(Damaged);
+            }
+            
+
+            if (health == 0)
+            {
+                isDead = true;
+                animator.SetTrigger(Death);
+            }
+
             healthBar.SetHealthUI(health);
         }
         

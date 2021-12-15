@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 public class Player : Character
 {
     #region Public Vars
@@ -13,11 +15,22 @@ public class Player : Character
 
     #region Privite Vars
 
+    // Cashed Animator Params
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+
+    private static readonly int Punch = Animator.StringToHash("Punch");
+    private static readonly int Punch02 = Animator.StringToHash("Punch02");
+
+    private static readonly int PlayerAoe01 = Animator.StringToHash("PlayerAOE01");
+    private static readonly int PlayerAoe02 = Animator.StringToHash("PlayerAOE02"); 
+
+    private readonly int[] punches = { Punch, Punch02 };
+    private readonly int[] aoes = { PlayerAoe01, PlayerAoe02 };
+
     private int maxHealth;
-
     private Vector3 playerRotation;
+    //private Animator animator;
 
-    private Animator animator;
 
     #endregion
 
@@ -42,6 +55,9 @@ public class Player : Character
 
         if (Physics.Raycast(Ray, out HitData, 2, target))
         {
+            int punchIndex = Random.Range(0, punches.Length);
+
+            animator.SetTrigger(punches[punchIndex]);
             Enemy enemy = HitData.transform.gameObject.GetComponent<Enemy>();
             enemy.DecreaseHealth(damage);
         }
@@ -50,6 +66,9 @@ public class Player : Character
 
     public void AoeAttack()
     {
+
+        int aoeIndex = Random.Range(0, aoes.Length);
+        animator.SetTrigger(aoes[aoeIndex]);
 
         Collider[] enemies = Physics.OverlapBox(transform.position + aoeOffset, boxSize / 2, transform.rotation, target);
 
@@ -98,6 +117,8 @@ public class Player : Character
         }
 
         animator = GetComponentInChildren<Animator>();
+        Damaged = Animator.StringToHash("PlayerDamage");
+        Death = Animator.StringToHash("PlayerDeath");
     }
 
     // Start is called before the first frame update
@@ -110,6 +131,11 @@ public class Player : Character
     // Update is called once per frame
     private void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         PlayerMovement();
         PlayerInput();
         SetHealth(Mathf.Clamp(health, 0, maxHealth));
@@ -117,15 +143,43 @@ public class Player : Character
 
     private void PlayerInput()
     {
+
         // Input for player attacks
         if (Input.GetMouseButtonDown(0))
         {
-            SingleTargetAttack();
+            if (CheckAttackDelay())
+            {
+                SingleTargetAttack();
+            }
+            
+
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            AoeAttack();
+            if (CheckAttackDelay())
+            {
+                AoeAttack();
+            }
+            
         }
+
+    }
+
+    /// <summary>
+    /// Helper function for checking the attack delay
+    /// </summary>
+    /// <returns>
+    /// True or false
+    /// </returns>
+    private bool CheckAttackDelay()
+    {
+        if (Time.time > NextAttackTime)
+        {
+            NextAttackTime = Time.time + AttackRate;
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -142,17 +196,21 @@ public class Player : Character
             playerRotation.y = 0;
             transform.rotation = Quaternion.Euler(playerRotation);
             referenceDirection = Vector3.right;
+            animator.SetBool(IsWalking, true);
         }
         else if (horizontalInput < 0)
         {
             playerRotation.y = 180;
             transform.rotation = Quaternion.Euler(playerRotation);
             referenceDirection = Vector3.left;
+            animator.SetBool(IsWalking, true);
+        }
+        else
+        {
+            animator.SetBool(IsWalking, false);
         }
 
         // Moves player left or right based on horizontal input
         transform.Translate(referenceDirection * movementSpeed * horizontalInput * Time.deltaTime);
-
-
     }
 }

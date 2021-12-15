@@ -31,6 +31,9 @@ public class Enemy : Character
 
     #region Privite Vars
 
+    private static readonly int IsWalking = Animator.StringToHash("isWalking");
+    private static readonly int Attack = Animator.StringToHash("Attack");
+
     private Player player;
 
     /// <summary>
@@ -39,9 +42,14 @@ public class Enemy : Character
     private Collider otherEnemy;
 
     /// <summary>
-    /// Time until the enemy is allowed to attack again 
+    /// The collider attached to this script. a.k.a the enemy
     /// </summary>
-    private float nextAttackTime;
+    private Collider enemyCollider;
+
+    /// <summary>
+    /// The collider attached to the player
+    /// </summary>
+    private Collider playerCollider;
 
     /// <summary>
     /// decides when to stop chasing player
@@ -58,7 +66,7 @@ public class Enemy : Character
     /// </summary>
     private bool updateAttackCount;
 
-    private Animator animator;
+    //private Animator animator;
 
     #endregion
 
@@ -70,9 +78,6 @@ public class Enemy : Character
     [SerializeField] private float searchRange;
     [SerializeField] private float attackWaitRange;
     [SerializeField] private float attackRange;
-
-    [Tooltip("How often the enemy will attack")]
-    [SerializeField] private float attackRate;
 
     #endregion
     #endregion
@@ -87,16 +92,21 @@ public class Enemy : Character
             // overrides the SingleTargetAttack method to damage the player
             Player _player = HitData.transform.gameObject.GetComponent<Player>();
             _player.DecreaseHealth(damage);
-            animator.SetTrigger("Attack");
+            animator.SetTrigger(Attack);
         }
     }
 
 
     private void Awake()
     {
+        // Initializes several vars when the script loads 
         player = FindObjectOfType<Player>();
         healthBar = GetComponentInChildren<HealthBar>();
         animator = GetComponentInChildren<Animator>();
+        Damaged = Animator.StringToHash("EnemyDamaged");
+        Death = Animator.StringToHash("EnemyDeath");
+        enemyCollider = GetComponent<BoxCollider>();
+        playerCollider = player.GetComponent<BoxCollider>();
     }
 
     private void Start()
@@ -114,11 +124,17 @@ public class Enemy : Character
             // cleanup when enemy dies
             SetHealth(0);
             GameManager.Instance.EnemiesAttacking -= 1;
-            Destroy(gameObject);
+
+            // Prevents the player from getting stuck on the enemy's body
+            Physics.IgnoreCollision(enemyCollider, playerCollider);
+            Destroy(gameObject, 2);
         }
 
+        // custom OnTriggerExit logic for when the enemy is destroyed
         if (triggered && !otherEnemy)
         {
+            triggered = false;
+            otherEnemy = null;
             stopMoving = false;
         }
 
@@ -136,11 +152,7 @@ public class Enemy : Character
                 AttackPlayer();
                 break;
         }
-
-        
-
     }
-
 
     #region AI
 
@@ -168,6 +180,11 @@ public class Enemy : Character
 
     private void SearchForPlayer()
     {
+        if (isDead || player.isDead)
+        {
+            return;
+        }
+
         stopMoving = false;
 
         // searches for the player in the search range
@@ -179,6 +196,10 @@ public class Enemy : Character
 
     private void MoveToWaitRange()
     {
+        if (isDead || player.isDead)
+        {
+            return;
+        }
 
         float step = movementSpeed * Time.deltaTime;
 
@@ -191,6 +212,11 @@ public class Enemy : Character
         {
             // moves the enemy to the wait range
             transform.position = Vector3.MoveTowards(enemyPos, waitPos, step);
+            animator.SetBool(IsWalking, true);
+        }
+        else
+        {
+            animator.SetBool(IsWalking, false);
         }
 
         // Sets state back to searching if player goes out of range
@@ -217,23 +243,50 @@ public class Enemy : Character
 
     private void AttackPlayer()
     {
-        
+        if (isDead || player.isDead)
+        {
+            return;
+        }
+
         float step = movementSpeed * Time.deltaTime;
 
         Vector3 playerPos = player.transform.position;
         Vector3 enemyPos = transform.position;
         Vector3 attackPos = new Vector3(playerPos.x + attackRange, enemyPos.y, enemyPos.z);
 
+        // Attacks the player at the rate of the next attack time.
+        if (Time.time > NextAttackTime)
+        {
+            SingleTargetAttack();
+            NextAttackTime = Time.time + AttackRate;
+        }
+
+        // if the enemy is colliding with another enemy then the rest of the logic is ignored
+        if (triggered)
+        {
+            animator.SetBool(IsWalking, false);
+            return;
+        }
+
+        // Enemy stops moving when the attack range is reached, then moves again when player exits attack range
+        stopMoving = Vector3.Distance(enemyPos, attackPos) < .1f;
+
         // Moves to the attack range
         if (!stopMoving)
         {
             transform.position = Vector3.MoveTowards(enemyPos, attackPos, step);
+            animator.SetBool(IsWalking, true);
+        }
+        else
+        {
+            animator.SetBool(IsWalking, false);
         }
 
 
         // Sets state back to searching if player goes out of range
         if (Vector3.Distance(transform.position, player.transform.position) > searchRange)
         {
+            animator.SetBool(IsWalking, false);
             CurrentState = State.Searching;
         }
 
@@ -245,12 +298,6 @@ public class Enemy : Character
             updateAttackCount = false;
         }
 
-        // Adds a delay to how often to attack the player
-        if (Time.time > nextAttackTime)
-        {
-            SingleTargetAttack();
-            nextAttackTime = Time.time + attackRate;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -260,7 +307,6 @@ public class Enemy : Character
             // setup for custom OnTriggerExit logic. Normal OnTriggerExit does not work when an object is destroyed 
             triggered = true;
             otherEnemy = other;
-
             stopMoving = true;
         }
     }
@@ -272,9 +318,9 @@ public class Enemy : Character
         {
             triggered = false;
             otherEnemy = null;
+            stopMoving = false;
         }
     }
 
     #endregion
-
 }
