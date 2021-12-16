@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentType: 0
-  healthToAdd: 10
+  healthToAdd: 15
   damageBoostAmount: 10
   boostDuration: 10
 --- !u!65 &7199578125708263532
