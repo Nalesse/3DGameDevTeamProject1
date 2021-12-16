@@ -16,11 +16,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     [field: SerializeField] public int EnemiesAttacking { get; set; }
 
+    [SerializeField] private GameObject gameOverUI;
+
 
     public void GameOver()
     {
-        // TODO finish game over function and Implement UI
-        Debug.Log("Game Over");
+        gameOverUI.SetActive(true);
     }
 
     private void Awake()
@@ -30,6 +31,11 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        gameOverUI.SetActive(false);
     }
 
     private void Update()
