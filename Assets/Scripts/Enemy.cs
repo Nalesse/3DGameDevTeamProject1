@@ -114,6 +114,10 @@ public class Enemy : Character
         // sets the health bars max value to health value set in inspector
         healthBar.SetMaxHealthUI(health);
         healthBar.gameObject.SetActive(false);
+
+        var enemyPos = transform.position;
+        enemyPos.z = player.transform.position.z;
+        transform.position = enemyPos;
     }
 
     // Update is called once per frame

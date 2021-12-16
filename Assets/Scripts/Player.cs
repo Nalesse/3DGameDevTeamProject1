@@ -35,9 +35,6 @@ public class Player : Character
     #endregion
 
     #region Serialized Fields
-    [Header("Player Movement")]
-    [SerializeField] private float maxZ;
-    [SerializeField] private float minZ;
 
     [Header("AOE Settings")]
 
@@ -193,9 +190,7 @@ public class Player : Character
     private void PlayerMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
         playerRotation = transform.eulerAngles;
-        Vector3 playerPos = transform.position;
         Vector3 referenceDirection = Vector3.right;
 
         // Rotates the player based on the horizontal input 
@@ -221,26 +216,6 @@ public class Player : Character
         // Moves player left or right based on horizontal input
         transform.Translate(referenceDirection * movementSpeed * horizontalInput * Time.deltaTime);
 
-        // Vertical movement
-        transform.Translate(Vector3.forward * (movementSpeed / 2) * verticalInput * Time.deltaTime);
 
-
-        // Limits players allowed movement on z axis
-        if (playerPos.z > maxZ)
-        {
-            playerPos.z = maxZ;
-            transform.position = playerPos;
-        }
-        else if (playerPos.z < minZ)
-        {
-            playerPos.z = minZ;
-            transform.position = playerPos;
-        }
-
-        // Vertical animation logic
-        if (verticalInput > 0 || verticalInput < 0)
-        {
-           animator.SetBool(IsWalking, true); 
-        }
     }
 }
