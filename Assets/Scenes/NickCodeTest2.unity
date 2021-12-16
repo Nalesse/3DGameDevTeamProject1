@@ -13733,8 +13733,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 840389382}
     - target: {fileID: 4391802303315929875, guid: 9a170677ca156404f90fa4dbac31a9f8, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Menu
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5145106454375810303, guid: 9a170677ca156404f90fa4dbac31a9f8, type: 3}
       propertyPath: m_Enabled
